@@ -1,7 +1,7 @@
-import { CreepSpawnArgs, CreepWithRole } from './interfaces'
+import { ICreepSpawnArgs, ICreepWithRole } from './interfaces'
 
-export const Upgrader: CreepWithRole = {
-  getSpawnArgs: (): CreepSpawnArgs => {
+export const Upgrader: ICreepWithRole = {
+  getSpawnArgs: (): ICreepSpawnArgs => {
     return [
       [WORK, CARRY, MOVE],
       `Upgrader${Game.time}`,

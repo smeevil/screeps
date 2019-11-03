@@ -1,12 +1,29 @@
-import { CreepRole } from '../../types/memory'
+import { ICreepRole } from '../../types/memory'
 
-export type CreepSpawnArgs = [
+export type ICreepSpawnArgs = [
   Array<WORK | CARRY | MOVE>,
   string,
-  { memory: { role: CreepRole } }
+  { memory: { role: ICreepRole } }
 ]
 
-export interface CreepWithRole {
+export interface ICreepWithRole {
   run: (creep: Creep) => void
-  getSpawnArgs: () => CreepSpawnArgs
+  getSpawnArgs: () => ICreepSpawnArgs
+}
+
+export interface ICarrier {
+  isFull: (creep: Creep) => boolean
+  isEmpty: (creep: Creep) => boolean
+}
+
+export interface IDeliverer {
+  deliverTo: (structure: Structure) => void
+}
+
+export interface IHarvester {
+  getClosestEnergySource: (creep: Creep) => Source
+  harvestEnergy: (creep: Creep) => void
+  deliverEnergy: (creep: Creep) => boolean
+  upgradeController: (creep: Creep) => boolean
+  getEnergyStructuresThatNeedEnergy: (creep: Creep) => Structure[]
 }

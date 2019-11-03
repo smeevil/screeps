@@ -95,6 +95,7 @@ module.exports = {
     ],
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/ban-ts-ignore': 0,
+    '@typescript-eslint/interface-name-prefix': 0,
     'no-undef': 0,
     'no-console': 0,
     'arrow-parens': ['error', 'always'],

@@ -1,7 +1,7 @@
-import { CreepSpawnArgs, CreepWithRole } from './interfaces'
+import { ICreepSpawnArgs, ICreepWithRole } from './interfaces'
 
-export const Builder: CreepWithRole = {
-  getSpawnArgs: (): CreepSpawnArgs => {
+export const Builder: ICreepWithRole = {
+  getSpawnArgs: (): ICreepSpawnArgs => {
     return [
       [WORK, CARRY, MOVE],
       `Builder${Game.time}`,
@@ -14,7 +14,7 @@ export const Builder: CreepWithRole = {
       creep.memory.building = false
       creep.say('🔄 harvest')
     }
-    if (!creep.memory.building && creep.store[RESOURCE_ENERGY] === 0) {
+    if (!creep.memory.building && creep.store[RESOURCE_ENERGY] > 0) {
       creep.memory.building = true
       creep.say('🚧 build')
     }

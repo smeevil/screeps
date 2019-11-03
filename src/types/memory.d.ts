@@ -1,9 +1,9 @@
-export type CreepRole = 'harvester' | 'builder' | 'upgrader'
+export type ICreepRole = 'harvester' | 'builder' | 'upgrader'
 
 export interface CreepMemory {
   building: boolean
   upgrading: boolean
-  role: CreepRole
+  role: ICreepRole
 }
 
 export interface FlagMemory {}

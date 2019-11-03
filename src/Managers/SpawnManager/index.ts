@@ -1,10 +1,16 @@
 import { Builder, Harvester, Upgrader } from '../../Creeps/Roles'
-import { CreepRole } from '../../types/memory'
-import { CreepSpawnArgs } from '../../Creeps/Roles/interfaces'
+import { ICreepRole } from '../../types/memory'
+import { ICreepSpawnArgs } from '../../Creeps/Roles/interfaces'
 
 export const SpawnManager = {
+  getMainSpawn(): StructureSpawn | null {
+    const spawns = Game.spawns
+    if (!Object.keys.length) return null
+    return Game.spawns[Object.keys(spawns)[0]]
+  },
+
   logSpawns(): void {
-    const spawn = Game.spawns[0]
+    const spawn = SpawnManager.getMainSpawn()
     if (!spawn || !spawn.spawning) return
 
     const spawningCreep = Game.creeps[spawn.spawning.name]
@@ -20,8 +26,9 @@ export const SpawnManager = {
     )
   },
 
-  spawnCreep(creepRole: CreepRole): void {
-    const [body, name, options] = ((creepRole): CreepSpawnArgs => {
+  spawnCreep(creepRole: ICreepRole): void {
+    const spawn = this.getMainSpawn()
+    const [body, name, options] = ((creepRole): ICreepSpawnArgs => {
       switch (creepRole) {
         case 'harvester':
           return Harvester.getSpawnArgs()
@@ -32,8 +39,7 @@ export const SpawnManager = {
       }
     })(creepRole)
 
-    const spawn = Object.keys(Game.spawns)[0]
     if (!spawn) return
-    Game.spawns[spawn].spawnCreep(body, name, options)
+    spawn.spawnCreep(body, name, options)
   },
 }
