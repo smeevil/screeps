@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
     "module": "esnext",
-    "lib": ["esnext"],
+    "lib": [
+      "esnext"
+    ],
     "target": "es2017",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "outDir": "dist",
     "baseUrl": "src/",
     "sourceMap": true,
@@ -11,7 +13,12 @@
     "experimentalDecorators": true,
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
-    "allowUnreachableCode": false
+    "allowUnreachableCode": false,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/typed-screeps",
+      "./src/types"
+    ]
   },
   "exclude": [
     "node_modules"
