@@ -1,6 +1,6 @@
-import { Builder, Harvester, Upgrader } from '../../Creeps/Roles'
-import { ICreepRole } from '../../types/memory'
-import { ICreepSpawnArgs } from '../../Creeps/Roles/interfaces'
+import { Builder, Harvester, Upgrader } from '../Creeps/Roles'
+import { ICreepRole } from '../types/memory'
+import { ICreepSpawnArgs } from '../Creeps/Roles/interfaces'
 
 export const SpawnManager = {
   getMainSpawn(): StructureSpawn | null {
@@ -26,8 +26,10 @@ export const SpawnManager = {
     )
   },
 
-  spawnCreep(creepRole: ICreepRole): void {
+  spawnCreep(creepRole: ICreepRole): boolean {
     const spawn = this.getMainSpawn()
+    if (!spawn || spawn.spawning !== null) return false
+
     const [body, name, options] = ((creepRole): ICreepSpawnArgs => {
       switch (creepRole) {
         case 'harvester':
@@ -39,7 +41,7 @@ export const SpawnManager = {
       }
     })(creepRole)
 
-    if (!spawn) return
     spawn.spawnCreep(body, name, options)
+    return true
   },
 }

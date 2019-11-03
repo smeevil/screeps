@@ -1,8 +1,10 @@
 export type ICreepRole = 'harvester' | 'builder' | 'upgrader'
 
 export interface CreepMemory {
-  building: boolean
-  upgrading: boolean
+  building?: boolean
+  upgrading?: boolean
+  harvesting?: boolean
+  delivering?: boolean
   role: ICreepRole
 }
 

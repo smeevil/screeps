@@ -1,13 +1,14 @@
-import { Builder, Harvester, Upgrader } from '../../Creeps/Roles'
+import { Builder, Harvester, Upgrader } from '../Creeps/Roles'
 import _ from 'lodash'
-import { ICreepRole } from '../../types/memory'
-import { SpawnManager } from '../'
+import { ICreepRole } from '../types/memory'
+import { SpawnManager } from './index'
 
-const MIN_CREEPS: { [key in ICreepRole]: number } = {
-  harvester: 2,
-  builder: 1,
-  upgrader: 1,
-}
+// Note order also denotes the build queue !
+const MIN_CREEPS: Array<{ role: ICreepRole; amount: number }> = [
+  { role: 'harvester', amount: 3 },
+  { role: 'upgrader', amount: 1 },
+  { role: 'builder', amount: 3 },
+]
 
 export const CreepManager = {
   getCreepsByRole(role: ICreepRole): Creep[] {
@@ -40,11 +41,10 @@ export const CreepManager = {
   },
 
   ensureSpawnedCreeps(): void {
-    for (const [role, minAmount] of Object.entries(MIN_CREEPS)) {
-      const creeps = this.getCreepsByRole(role as ICreepRole)
-      if (creeps.length >= minAmount) return
-      console.log(`Should spawn a ${role}`)
-      SpawnManager.spawnCreep(role as ICreepRole)
-    }
+    MIN_CREEPS.every((creep) => {
+      const creeps = this.getCreepsByRole(creep.role)
+      if (creeps.length >= creep.amount) return true //next iteration
+      return !SpawnManager.spawnCreep(creep.role) // if spawn was accepted, break iteration
+    })
   },
 }

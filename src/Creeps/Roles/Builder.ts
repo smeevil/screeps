@@ -1,36 +1,30 @@
 import { ICreepSpawnArgs, ICreepWithRole } from './interfaces'
+import { Actions } from '../../actions'
+import { Queries } from '../../queries'
 
 export const Builder: ICreepWithRole = {
   getSpawnArgs: (): ICreepSpawnArgs => {
     return [
       [WORK, CARRY, MOVE],
       `Builder${Game.time}`,
-      { memory: { role: 'builder' } },
+      { memory: { role: 'builder', building: false, harvesting: false } },
     ]
   },
 
   run: (creep: Creep): boolean => {
-    if (creep.memory.building && creep.store[RESOURCE_ENERGY] === 0) {
+    if (creep.memory.harvesting && !Queries.isFull(creep))
+      return Actions.harvestEnergy(creep)
+
+    creep.memory.harvesting = false
+
+    if (creep.memory.building && Queries.isEmpty(creep)) {
       creep.memory.building = false
-      creep.say('🔄 harvest')
-    }
-    if (!creep.memory.building && creep.store[RESOURCE_ENERGY] > 0) {
-      creep.memory.building = true
-      creep.say('🚧 build')
+      return Actions.harvestEnergy(creep)
     }
 
-    if (creep.memory.building) {
-      const targets = creep.room.find(FIND_CONSTRUCTION_SITES)
-      if (targets.length && creep.build(targets[0]) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(targets[0], {
-          visualizePathStyle: { stroke: '#ffffff' },
-        })
-      }
-    } else {
-      const sources = creep.room.find(FIND_SOURCES)
-      if (creep.harvest(sources[0]) === ERR_NOT_IN_RANGE)
-        creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } })
-    }
-    return true
+    if (!Queries.isEmpty(creep) && Actions.goBuild(creep)) return true
+
+    creep.memory.building = false
+    return Actions.harvestEnergy(creep)
   },
 }
