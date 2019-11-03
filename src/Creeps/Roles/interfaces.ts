@@ -7,7 +7,7 @@ export type ICreepSpawnArgs = [
 ]
 
 export interface ICreepWithRole {
-  run: (creep: Creep) => void
+  run: (creep: Creep) => boolean
   getSpawnArgs: () => ICreepSpawnArgs
 }
 
@@ -22,7 +22,7 @@ export interface IDeliverer {
 
 export interface IHarvester {
   getClosestEnergySource: (creep: Creep) => Source
-  harvestEnergy: (creep: Creep) => void
+  harvestEnergy: (creep: Creep) => boolean
   deliverEnergy: (creep: Creep) => boolean
   upgradeController: (creep: Creep) => boolean
   getEnergyStructuresThatNeedEnergy: (creep: Creep) => Structure[]

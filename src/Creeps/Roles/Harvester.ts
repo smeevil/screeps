@@ -7,10 +7,12 @@ import {
 } from './interfaces'
 
 export const Harvester: ICreepWithRole & ICarrier & IDeliverer & IHarvester = {
-  run(creep: Creep): void {
+  run(creep: Creep): boolean {
     if (this.isEmpty(creep)) return this.harvestEnergy(creep)
 
-    if (!this.deliverEnergy(creep)) this.upgradeController(creep)
+    if (!this.deliverEnergy(creep)) return this.upgradeController(creep)
+
+    return false
   },
 
   getSpawnArgs: (): ICreepSpawnArgs => {
@@ -37,10 +39,13 @@ export const Harvester: ICreepWithRole & ICarrier & IDeliverer & IHarvester = {
     return creep.room.find(FIND_SOURCES)[0]
   },
 
-  harvestEnergy(creep: Creep): void {
+  harvestEnergy(creep: Creep): boolean {
     const source = this.getClosestEnergySource(creep)
+    if (!source) return false
+    creep.say(`⛏⚡️`)
     if (creep.harvest(source) === ERR_NOT_IN_RANGE)
       creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
+    return true
   },
 
   deliverEnergy(creep: Creep): boolean {
@@ -48,7 +53,7 @@ export const Harvester: ICreepWithRole & ICarrier & IDeliverer & IHarvester = {
 
     // if no buildings need energy, dump it in the upgrade
     if (!targets.length) return false
-
+    creep.say(`🚚⚡️🏢`)
     //supply the building with energy
     if (creep.transfer(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
       creep.moveTo(targets[0], {
@@ -74,6 +79,8 @@ export const Harvester: ICreepWithRole & ICarrier & IDeliverer & IHarvester = {
   upgradeController(creep: Creep): boolean {
     const controller = creep.room.controller
     if (!controller) return false
+
+    creep.say(`🚚⚡️🏢`)
     if (creep.upgradeController(controller) === ERR_NOT_IN_RANGE)
       creep.moveTo(controller, { visualizePathStyle: { stroke: '#ffffff' } })
     return true

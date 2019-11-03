@@ -9,7 +9,7 @@ export const Builder: ICreepWithRole = {
     ]
   },
 
-  run: (creep: Creep): void => {
+  run: (creep: Creep): boolean => {
     if (creep.memory.building && creep.store[RESOURCE_ENERGY] === 0) {
       creep.memory.building = false
       creep.say('🔄 harvest')
@@ -31,5 +31,6 @@ export const Builder: ICreepWithRole = {
       if (creep.harvest(sources[0]) === ERR_NOT_IN_RANGE)
         creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } })
     }
+    return true
   },
 }
